@@ -1,0 +1,29 @@
+{
+  "name": "rick-n-morty-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "migrate": "knex migrate:latest",
+    "seed": "knex seed:run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BudnikOleksii/rick-n-morty-server.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BudnikOleksii/rick-n-morty-server/issues"
+  },
+  "homepage": "https://github.com/BudnikOleksii/rick-n-morty-server#readme",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "knex": "^2.4.2",
+    "pg": "^8.11.0"
+  },
+  "devDependencies": {
+    "prettier": "2.8.8"
+  }
+}
