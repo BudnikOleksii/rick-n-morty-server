@@ -1,0 +1,226 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Models
+model Role {
+  id          Int        @id @default(autoincrement())
+  value       String     @unique
+  description String
+  users       UserRole[]
+}
+
+model Chat {
+  id       Int        @id @default(autoincrement())
+  name     String
+  messages Message[]
+  users    User[]
+  UserChat UserChat[]
+}
+
+model Message {
+  id        Int       @id @default(autoincrement())
+  chatId    Int
+  chat      Chat      @relation(fields: [chatId], references: [id])
+  userId    Int
+  user      User      @relation(fields: [userId], references: [id])
+  body      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+}
+
+model User {
+  id             Int           @id @default(autoincrement())
+  username       String        @unique
+  email          String        @unique
+  password       String
+  rating         Int           @default(0)
+  ip             String
+  activationLink String
+  activated      Boolean       @default(false)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  deletedAt      DateTime?
+  roles          UserRole[]
+  chats          Chat[]
+  Message        Message[]
+  UserChat       UserChat[]
+  Seller         Transaction[] @relation("seller")
+  Purchaser      Transaction[] @relation("purchaser")
+  Card           Card[]
+  Lot            Lot[]
+}
+
+model UserRole {
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+  role   Role @relation(fields: [roleId], references: [id])
+  roleId Int
+
+  @@id([userId, roleId])
+}
+
+model UserChat {
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+  chat   Chat @relation(fields: [chatId], references: [id])
+  chatId Int
+
+  @@id([userId, chatId])
+}
+
+model Type {
+  id         Int         @id @default(autoincrement())
+  name       String      @unique
+  characters Character[]
+}
+
+model Species {
+  id         Int         @id @default(autoincrement())
+  name       String      @unique
+  characters Character[]
+}
+
+model Episode {
+  id               Int                @id @default(autoincrement())
+  name             String
+  airDate          DateTime?
+  episode          String
+  CharacterEpisode CharacterEpisode[]
+}
+
+model Location {
+  id                Int                 @id @default(autoincrement())
+  name              String
+  type              String
+  dimension         String
+  LocationCharacter LocationCharacter[]
+  Origin            Character[]         @relation("origin")
+  Location          Character[]         @relation("location")
+}
+
+model Character {
+  id                Int                 @id @default(autoincrement())
+  name              String
+  status            CharacterStatus
+  species           Species             @relation(fields: [speciesId], references: [id])
+  speciesId         Int
+  type              Type                @relation(fields: [typeId], references: [id])
+  typeId            Int
+  gender            CharacterGender
+  origin            Location?           @relation("origin", fields: [originId], references: [id])
+  originId          Int?
+  location          Location?           @relation("location", fields: [locationId], references: [id])
+  locationId        Int?
+  image             String?
+  createdAt         DateTime            @default(now())
+  deletedAt         DateTime?
+  unused            Boolean             @default(true)
+  LocationCharacter LocationCharacter[]
+  CharacterEpisode  CharacterEpisode[]
+  SetCharacter      SetCharacter[]
+  Card              Card[]
+}
+
+model LocationCharacter {
+  locationId  Int       @map("locationId")
+  location    Location  @relation(fields: [locationId], references: [id])
+  characterId Int       @map("characterId")
+  character   Character @relation(fields: [characterId], references: [id])
+
+  @@id([locationId, characterId])
+}
+
+model CharacterEpisode {
+  characterId Int       @map("characterId")
+  character   Character @relation(fields: [characterId], references: [id])
+  episodeId   Int       @map("episodeId")
+  episode     Episode   @relation(fields: [episodeId], references: [id])
+
+  @@id([characterId, episodeId])
+}
+
+model Set {
+  id           Int            @id @default(autoincrement())
+  name         String
+  SetCharacter SetCharacter[]
+}
+
+model SetCharacter {
+  setId       Int       @map("setId")
+  set         Set       @relation(fields: [setId], references: [id])
+  characterId Int       @map("characterId")
+  character   Character @relation(fields: [characterId], references: [id])
+
+  @@id([setId, characterId])
+}
+
+model Card {
+  id          Int       @id @default(autoincrement())
+  characterId Int       @map("characterId")
+  character   Character @relation(fields: [characterId], references: [id])
+  ownerId     Int?      @map("ownerId")
+  owner       User?     @relation(fields: [ownerId], references: [id])
+  createdAt   DateTime  @default(now())
+  deletedAt   DateTime?
+  Lot         Lot[]
+
+  @@index([characterId], name: "idx_cards_characterId")
+}
+
+model Lot {
+  id                Int           @id @default(autoincrement())
+  cardId            Int           @map("cardId")
+  card              Card          @relation(fields: [cardId], references: [id])
+  initialPrice      Int
+  currentPrice      Int
+  startDate         DateTime      @default(now())
+  endDate           DateTime      @default(now())
+  minActionDuration Int           @default(300000)
+  maxActionDuration Int           @default(300000)
+  minStep           Int
+  maxPrice          Int
+  lastPersonToBetId Int?          @map("lastPersonToBetId")
+  lastPersonToBet   User?         @relation(fields: [lastPersonToBetId], references: [id])
+  activated         Boolean       @default(true)
+  transactions      Transaction[]
+
+  @@index([cardId], name: "idx_lots_cardId")
+}
+
+model Transaction {
+  id          Int      @id @default(autoincrement())
+  lotId       Int?     @map("lotId")
+  lot         Lot?     @relation(fields: [lotId], references: [id])
+  sellerId    Int?     @map("sellerId")
+  seller      User?    @relation("seller", fields: [sellerId], references: [id])
+  purchaserId Int?     @map("purchaserId")
+  purchaser   User?    @relation("purchaser", fields: [purchaserId], references: [id])
+  amount      Float
+  systemFee   Float
+  createdAt   DateTime @default(now())
+
+  @@index([lotId], name: "idx_transactions_lotId")
+  @@index([sellerId], name: "idx_transactions_sellerId")
+  @@index([purchaserId], name: "idx_transactions_purchaserId")
+}
+
+// Enums
+enum CharacterStatus {
+  Alive
+  Dead
+  unknown
+}
+
+enum CharacterGender {
+  Female
+  Male
+  Genderless
+  unknown
+}
