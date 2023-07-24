@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { RolesModule } from './roles/roles.module';
+import { TokensModule } from './tokens/tokens.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { RolesModule } from './roles/roles.module';
     UserModule,
     PrismaModule,
     RolesModule,
+    TokensModule,
   ],
   controllers: [],
   providers: [],

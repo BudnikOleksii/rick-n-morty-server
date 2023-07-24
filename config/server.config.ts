@@ -1,4 +1,5 @@
 import { registerAs } from '@nestjs/config';
+import * as process from 'process';
 
 export interface ServerConfig {
   port: number;
@@ -6,8 +7,10 @@ export interface ServerConfig {
   adminRole: string;
   userRole: string;
   saltRounds: number;
-  accessTokenExpiresIn: string;
-  refreshTokenExpiresIn: string;
+  accessSecret: string;
+  refreshSecret: string;
+  accessExpiresIn: string;
+  refreshExpiresIn: string;
 }
 
 export default registerAs(
@@ -18,7 +21,9 @@ export default registerAs(
     adminRole: 'ADMIN',
     userRole: 'USER',
     saltRounds: 7,
-    accessTokenExpiresIn: '10m',
-    refreshTokenExpiresIn: '30d',
+    accessSecret: process.env.JWT_ACCESS_SECRET,
+    refreshSecret: process.env.JWT_REFRESH_SECRET,
+    accessExpiresIn: '10m',
+    refreshExpiresIn: '30d',
   })
 );

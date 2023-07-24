@@ -46,11 +46,15 @@ export class UserService {
     return this.userRepository.createUser(payload);
   }
 
-  async getUserByEmail(email: User['email']) {
+  getUserById(id: User['id']) {
+    return this.userRepository.getUserById(id);
+  }
+
+  getUserByEmail(email: User['email']) {
     return this.userRepository.getUserByEmail(email);
   }
 
-  async getUserByUsername(username: User['username']) {
+  getUserByUsername(username: User['username']) {
     return this.userRepository.getUserByUsername(username);
   }
 }
