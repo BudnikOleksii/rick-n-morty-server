@@ -2,6 +2,7 @@ import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Prisma, Token, User } from '@prisma/client';
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 import serverConfig from '../../config/server.config';
 import { ITokenPayload, ITokenWithId } from '../interfaces';
@@ -86,5 +87,11 @@ export class TokensService {
     };
 
     return tokenPayload;
+  }
+
+  @Cron(CronExpression.EVERY_MINUTE)
+  async removeExpiredTokens() {
+    const { count } = await this.tokensRepository.removeExpiredTokens();
+    console.log(`${count} tokens were deleted`);
   }
 }

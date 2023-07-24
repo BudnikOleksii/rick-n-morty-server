@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { ScheduleModule } from '@nestjs/schedule';
 
 import databaseConfig from '../config/database.config';
 import serverConfig from '../config/server.config';
@@ -15,6 +16,7 @@ import { TokensModule } from './tokens/tokens.module';
       load: [serverConfig, databaseConfig],
       isGlobal: true,
     }),
+    ScheduleModule.forRoot(),
     AuthModule,
     UserModule,
     PrismaModule,
