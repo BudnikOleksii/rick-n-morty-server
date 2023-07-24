@@ -27,4 +27,16 @@ export class TokensRepository {
   deleteToken(id: Token['id']) {
     return this.prisma.token.delete({ where: { id } });
   }
+
+  removeExpiredTokens() {
+    const currentDate = new Date().toISOString();
+
+    return this.prisma.token.deleteMany({
+      where: {
+        expiresAt: {
+          lt: currentDate,
+        },
+      },
+    });
+  }
 }
