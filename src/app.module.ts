@@ -1,7 +1,26 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+
+import databaseConfig from '../config/database.config';
+import serverConfig from '../config/server.config';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
+import { PrismaModule } from './prisma/prisma.module';
+import { RolesModule } from './roles/roles.module';
+import { TokensModule } from './tokens/tokens.module';
 
 @Module({
-  imports: [],
+  imports: [
+    ConfigModule.forRoot({
+      load: [serverConfig, databaseConfig],
+      isGlobal: true,
+    }),
+    AuthModule,
+    UserModule,
+    PrismaModule,
+    RolesModule,
+    TokensModule,
+  ],
   controllers: [],
   providers: [],
 })
