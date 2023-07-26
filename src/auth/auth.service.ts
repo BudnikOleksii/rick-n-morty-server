@@ -6,7 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 import { LoginDto, SignupDto } from './dto';
 import serverConfig from '../../config/server.config';
-import { ITokenWithId } from '../interfaces';
+import { ITokenWithId } from '../common/interfaces';
 import { TokensService } from '../tokens/tokens.service';
 
 @Injectable()

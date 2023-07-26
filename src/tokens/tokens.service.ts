@@ -5,7 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Cron, CronExpression } from '@nestjs/schedule';
 
 import serverConfig from '../../config/server.config';
-import { ITokenPayload, ITokenWithId } from '../interfaces';
+import { ITokenPayload, ITokenWithId } from '../common/interfaces';
 import { TokensRepository } from './tokens.repository';
 import { UserWithRoles } from '../user/user.repository';
 

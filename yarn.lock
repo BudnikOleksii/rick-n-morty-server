@@ -706,6 +706,11 @@
     semver "^7.3.5"
     tar "^6.1.11"
 
+"@nanogiants/nestjs-swagger-api-exception-decorator@^1.6.5":
+  version "1.6.5"
+  resolved "https://registry.yarnpkg.com/@nanogiants/nestjs-swagger-api-exception-decorator/-/nestjs-swagger-api-exception-decorator-1.6.5.tgz#0247ac53e7017ba0d27545467d9cd24559ba7949"
+  integrity sha512-Ob/4mZTZqE3Do9BBi9bkvWERxaCHH3DNoaEFtmvNnNUGE2iVvcKwNzrTISfV3KMB1K1zhc1NWQUG5XAz06jsMg==
+
 "@nestjs/cli@^10.0.0":
   version "10.1.9"
   resolved "https://registry.yarnpkg.com/@nestjs/cli/-/cli-10.1.9.tgz#97d37103962571ee28ef0d00ab080c86bc4dda7a"

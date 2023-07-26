@@ -53,8 +53,8 @@ model User {
   UserChat       UserChat[]
   Seller         Transaction[] @relation("seller")
   Purchaser      Transaction[] @relation("purchaser")
-  Card           Card[]
-  Lot            Lot[]
+  cards          Card[]
+  lots           Lot[]
   Token          Token[]
 }
 
@@ -99,44 +99,44 @@ model Species {
 }
 
 model Episode {
-  id               Int                @id @default(autoincrement())
-  name             String
-  airDate          DateTime?
-  episode          String
-  CharacterEpisode CharacterEpisode[]
+  id         Int                @id @default(autoincrement())
+  name       String
+  airDate    DateTime?
+  episode    String
+  characters CharacterEpisode[]
 }
 
 model Location {
-  id                Int                 @id @default(autoincrement())
-  name              String
-  type              String
-  dimension         String
-  LocationCharacter LocationCharacter[]
-  Origin            Character[]         @relation("origin")
-  Location          Character[]         @relation("location")
+  id         Int                 @id @default(autoincrement())
+  name       String
+  type       String
+  dimension  String
+  characters LocationCharacter[]
+  Origin     Character[]         @relation("origin")
+  Location   Character[]         @relation("location")
 }
 
 model Character {
-  id                Int                 @id @default(autoincrement())
-  name              String
-  status            CharacterStatus
-  species           Species             @relation(fields: [speciesId], references: [id])
-  speciesId         Int
-  type              Type                @relation(fields: [typeId], references: [id])
-  typeId            Int
-  gender            CharacterGender
-  origin            Location?           @relation("origin", fields: [originId], references: [id])
-  originId          Int?
-  location          Location?           @relation("location", fields: [locationId], references: [id])
-  locationId        Int?
-  image             String?
-  createdAt         DateTime            @default(now())
-  deletedAt         DateTime?
-  unused            Boolean             @default(true)
-  LocationCharacter LocationCharacter[]
-  CharacterEpisode  CharacterEpisode[]
-  SetCharacter      SetCharacter[]
-  Card              Card[]
+  id         Int                 @id @default(autoincrement())
+  name       String
+  status     CharacterStatus
+  species    Species             @relation(fields: [speciesId], references: [id])
+  speciesId  Int
+  type       Type                @relation(fields: [typeId], references: [id])
+  typeId     Int
+  gender     CharacterGender
+  origin     Location?           @relation("origin", fields: [originId], references: [id])
+  originId   Int?
+  location   Location?           @relation("location", fields: [locationId], references: [id])
+  locationId Int?
+  image      String?
+  createdAt  DateTime            @default(now())
+  deletedAt  DateTime?
+  unused     Boolean             @default(true)
+  locations  LocationCharacter[]
+  episodes   CharacterEpisode[]
+  sets       SetCharacter[]
+  cards      Card[]
 }
 
 model LocationCharacter {
