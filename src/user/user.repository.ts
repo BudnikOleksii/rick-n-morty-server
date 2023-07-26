@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, User } from '@prisma/client';
+import { Prisma, Role, User } from '@prisma/client';
 
 import { PrismaService } from '../prisma/prisma.service';
 
@@ -21,6 +21,21 @@ export class UserRepository {
     });
   }
 
+  async getUsers(page: number, limit: number) {
+    const offset = (page - 1) * limit;
+
+    const [users, total] = await this.prisma.$transaction([
+      this.prisma.user.findMany({
+        include: includeRolesQuery,
+        skip: offset,
+        take: limit,
+      }),
+      this.prisma.user.count(),
+    ]);
+
+    return { users, total };
+  }
+
   getUserById(id: User['id']) {
     return this.prisma.user.findUnique({
       where: { id },
@@ -39,6 +54,41 @@ export class UserRepository {
     return this.prisma.user.findUnique({
       where: { username },
       include: includeRolesQuery,
+    });
+  }
+
+  async toggleUserRole(userId: User['id'], roleId: Role['id']) {
+    const existingRole = await this.prisma.userRole.findFirst({
+      where: {
+        userId,
+        roleId,
+      },
+    });
+
+    return existingRole ? this.removeUserRole(userId, roleId) : this.addUserRole(userId, roleId);
+  }
+
+  removeUserRole(userId: User['id'], roleId: Role['id']) {
+    return this.prisma.userRole.delete({
+      where: {
+        userId_roleId: {
+          userId,
+          roleId,
+        },
+      },
+    });
+  }
+
+  addUserRole(userId: User['id'], roleId: Role['id']) {
+    return this.prisma.userRole.create({
+      data: {
+        user: {
+          connect: { id: userId },
+        },
+        role: {
+          connect: { id: roleId },
+        },
+      },
     });
   }
 }

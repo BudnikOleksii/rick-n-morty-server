@@ -18,6 +18,7 @@ async function bootstrap() {
     .setTitle('Rick and Morty API')
     .setDescription('Documentation how to use Rick and Morty API')
     .setVersion('1.0.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, docsConfig);
   SwaggerModule.setup('/api-docs', app, document);

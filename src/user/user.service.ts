@@ -1,13 +1,17 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
-import { User } from '@prisma/client';
+import { Role, User } from '@prisma/client';
 import { ConfigType } from '@nestjs/config';
 
 import { CreateUserDto } from './dto';
 import { RolesService } from '../roles/roles.service';
 import { UserRepository } from './user.repository';
 import serverConfig from '../../config/server.config';
+import { PageDto } from '../common/dto';
+import { createInfoData } from '../common/helpers';
+import { IPaginatedResult } from '../common/interfaces';
+import { DEFAULT_PAGE, DEFAULT_LIMIT } from '../common/constatns';
 
 @Injectable()
 export class UserService {
@@ -17,6 +21,26 @@ export class UserService {
     private userRepository: UserRepository,
     private rolesService: RolesService
   ) {}
+
+  async getUsers(pageDto: PageDto, endpoint: string): Promise<IPaginatedResult<User>> {
+    const { page = DEFAULT_PAGE, limit = DEFAULT_LIMIT } = pageDto;
+    const { users, total } = await this.userRepository.getUsers(page, limit);
+
+    return {
+      info: createInfoData(total, page, limit, endpoint),
+      result: users,
+    };
+  }
+
+  async getUser(id: User['id']) {
+    const user = await this.userRepository.getUserById(id);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
+  }
 
   async createUser(dto: CreateUserDto) {
     let candidate = await this.getUserByEmail(dto.email);
@@ -44,6 +68,14 @@ export class UserService {
     };
 
     return this.userRepository.createUser(payload);
+  }
+
+  async toggleUserRole(id: User['id'], roleValue: Role['value']) {
+    const user = await this.getUser(id);
+    const role = await this.rolesService.getRoleByValue(roleValue);
+    await this.userRepository.toggleUserRole(user.id, role.id);
+
+    return this.getUser(id);
   }
 
   getUserById(id: User['id']) {
