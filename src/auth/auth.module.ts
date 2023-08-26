@@ -8,6 +8,7 @@ import { UserModule } from '../user/user.module';
 import { getJWTConfig } from '../../config/jwt.config';
 import { AccessTokenStrategy, RefreshTokenStrategy } from './strategies';
 import { TokensModule } from '../tokens/tokens.module';
+import { ActivationLinksModule } from '../activation-links/activation-links.module';
 
 @Module({
   controllers: [AuthController],
@@ -21,6 +22,7 @@ import { TokensModule } from '../tokens/tokens.module';
     }),
     UserModule,
     TokensModule,
+    ActivationLinksModule,
   ],
 })
 export class AuthModule {}

@@ -24,6 +24,6 @@ export default registerAs(
     accessSecret: process.env.JWT_ACCESS_SECRET,
     refreshSecret: process.env.JWT_REFRESH_SECRET,
     accessExpiresIn: '10m',
-    refreshExpiresIn: '30d',
+    refreshExpiresIn: '7d',
   })
 );

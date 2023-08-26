@@ -10,6 +10,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { RolesModule } from './roles/roles.module';
 import { TokensModule } from './tokens/tokens.module';
 import { CharactersModule } from './characters/characters.module';
+import { ActivationLinksModule } from './activation-links/activation-links.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { CharactersModule } from './characters/characters.module';
     RolesModule,
     TokensModule,
     CharactersModule,
+    ActivationLinksModule,
   ],
   controllers: [],
   providers: [],

@@ -11,6 +11,7 @@ import { PageDto } from '../common/dto';
 import { createInfoData } from '../common/helpers';
 import { IPaginatedResult } from '../common/interfaces';
 import { DEFAULT_PAGE, DEFAULT_LIMIT } from '../common/constatns';
+import { ActivationLinksService } from '../activation-links/activation-links.service';
 
 @Injectable()
 export class UserService {
@@ -63,8 +64,6 @@ export class UserService {
         create: [{ roleId: role.id }],
       },
     };
-
-    // TODO create activation link record in database
 
     return this.userRepository.createUser(payload);
   }

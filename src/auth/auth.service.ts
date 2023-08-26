@@ -1,22 +1,20 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { ConfigType } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
 
 import { UserService } from '../user/user.service';
 import { LoginDto, SignupDto } from './dto';
 import serverConfig from '../../config/server.config';
 import { ITokenWithId } from '../common/interfaces';
 import { TokensService } from '../tokens/tokens.service';
+import { ActivationLinksService } from '../activation-links/activation-links.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     @Inject(serverConfig.KEY)
-    private config: ConfigType<typeof serverConfig>,
-    private jwt: JwtService,
     private userService: UserService,
-    private tokensService: TokensService
+    private tokensService: TokensService,
+    private activationLinksService: ActivationLinksService
   ) {}
 
   async login(dto: LoginDto) {
@@ -33,6 +31,7 @@ export class AuthService {
 
   async signup(dto: SignupDto, ip: string) {
     const user = await this.userService.createUser({ ...dto, ip });
+    const activationLink = await this.activationLinksService.createActivationLink(user.id);
     const tokens = await this.tokensService.generateTokens(user);
     const tokenId = await this.tokensService.storeToken(tokens.refreshToken, user.id);
 
