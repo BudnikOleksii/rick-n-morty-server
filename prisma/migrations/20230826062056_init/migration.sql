@@ -14,6 +14,15 @@ CREATE TABLE "Role" (
 );
 
 -- CreateTable
+CREATE TABLE "ActivationLink" (
+    "id" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "expiresAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "ActivationLink_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Chat" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
@@ -42,13 +51,24 @@ CREATE TABLE "User" (
     "password" TEXT NOT NULL,
     "rating" INTEGER NOT NULL DEFAULT 0,
     "ip" TEXT NOT NULL,
-    "activationLink" TEXT NOT NULL,
     "activated" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "deletedAt" TIMESTAMP(3),
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Token" (
+    "id" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "refreshToken" TEXT NOT NULL,
+    "expiresAt" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Token_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -79,6 +99,7 @@ CREATE TABLE "Type" (
 CREATE TABLE "Species" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
 
     CONSTRAINT "Species_pkey" PRIMARY KEY ("id")
 );
@@ -87,6 +108,7 @@ CREATE TABLE "Species" (
 CREATE TABLE "Episode" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
     "airDate" TIMESTAMP(3),
     "episode" TEXT NOT NULL,
 
@@ -97,6 +119,7 @@ CREATE TABLE "Episode" (
 CREATE TABLE "Location" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
     "type" TEXT NOT NULL,
     "dimension" TEXT NOT NULL,
 
@@ -107,6 +130,7 @@ CREATE TABLE "Location" (
 CREATE TABLE "Character" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
     "status" "CharacterStatus" NOT NULL,
     "speciesId" INTEGER NOT NULL,
     "typeId" INTEGER NOT NULL,
@@ -217,6 +241,18 @@ CREATE UNIQUE INDEX "Type_name_key" ON "Type"("name");
 CREATE UNIQUE INDEX "Species_name_key" ON "Species"("name");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Species_slug_key" ON "Species"("slug");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Episode_slug_key" ON "Episode"("slug");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Location_slug_key" ON "Location"("slug");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Character_slug_key" ON "Character"("slug");
+
+-- CreateIndex
 CREATE INDEX "idx_cards_characterId" ON "Card"("characterId");
 
 -- CreateIndex
@@ -238,10 +274,16 @@ CREATE UNIQUE INDEX "_ChatToUser_AB_unique" ON "_ChatToUser"("A", "B");
 CREATE INDEX "_ChatToUser_B_index" ON "_ChatToUser"("B");
 
 -- AddForeignKey
+ALTER TABLE "ActivationLink" ADD CONSTRAINT "ActivationLink_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Message" ADD CONSTRAINT "Message_chatId_fkey" FOREIGN KEY ("chatId") REFERENCES "Chat"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Message" ADD CONSTRAINT "Message_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Token" ADD CONSTRAINT "Token_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "UserRole" ADD CONSTRAINT "UserRole_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

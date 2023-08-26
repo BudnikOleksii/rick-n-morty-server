@@ -8,6 +8,7 @@ const getLocation = (location) => {
     name,
     type,
     dimension,
+    slug: name.replace(/ /g, '-').toLowerCase(),
   };
 };
 
