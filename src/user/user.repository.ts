@@ -57,6 +57,14 @@ export class UserRepository {
     });
   }
 
+  updateUser(id: User['id'], payload: Prisma.UserUpdateInput) {
+    return this.prisma.user.update({
+      where: { id },
+      data: payload,
+      include: includeRolesQuery,
+    });
+  }
+
   async toggleUserRole(userId: User['id'], roleId: Role['id']) {
     const existingRole = await this.prisma.userRole.findFirst({
       where: {

@@ -11,7 +11,6 @@ import { PageDto } from '../common/dto';
 import { createInfoData } from '../common/helpers';
 import { IPaginatedResult } from '../common/interfaces';
 import { DEFAULT_PAGE, DEFAULT_LIMIT } from '../common/constatns';
-import { ActivationLinksService } from '../activation-links/activation-links.service';
 
 @Injectable()
 export class UserService {
@@ -66,6 +65,16 @@ export class UserService {
     };
 
     return this.userRepository.createUser(payload);
+  }
+
+  async activateUser(id: User['id']) {
+    const user = await this.userRepository.updateUser(id, { activated: true });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
   }
 
   async toggleUserRole(id: User['id'], roleValue: Role['value']) {

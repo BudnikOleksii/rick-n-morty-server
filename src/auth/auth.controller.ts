@@ -4,22 +4,33 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
-  HttpCode,
   Ip,
+  Param,
   Post,
   Req,
+  Res,
   UnauthorizedException,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ActivationLink } from '@prisma/client';
+import { Response } from 'express';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { ApiException } from '@nanogiants/nestjs-swagger-api-exception-decorator';
 
 import { AuthService } from './auth.service';
 import { AuthResponseDto, LoginDto, SignupDto } from './dto';
 import { IRequestWithToken } from '../common/interfaces';
 import JwtRefreshGuard from '../common/guards/jwt-refresh.guard';
 import { ReturnedUserDto } from '../user/dto';
-import { ApiException } from '@nanogiants/nestjs-swagger-api-exception-decorator';
+import { MessageResponse } from '../interfaces/message-response';
 
 @ApiTags('Auth')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -30,7 +41,6 @@ export class AuthController {
   @ApiOperation({ summary: 'Login' })
   @ApiOkResponse({ status: 200, type: AuthResponseDto })
   @ApiException(() => UnauthorizedException, { description: 'Invalid password or email' })
-  @HttpCode(200)
   @Post('login')
   async login(@Body() dto: LoginDto): Promise<AuthResponseDto> {
     const response = await this.authService.login(dto);
@@ -42,16 +52,22 @@ export class AuthController {
   }
 
   @ApiOperation({ summary: 'Signup' })
-  @ApiOkResponse({ status: 201, type: AuthResponseDto })
+  @ApiOkResponse({ status: 201, type: MessageResponse })
   @ApiException(() => BadRequestException, { description: 'Username or email already in use' })
   @Post('signup')
-  async signup(@Body() dto: SignupDto, @Ip() ip: string): Promise<AuthResponseDto> {
-    const response = await this.authService.signup(dto, ip);
+  async signup(@Body() dto: SignupDto, @Ip() ip: string): Promise<MessageResponse> {
+    return this.authService.signup(dto, ip);
+  }
 
-    return {
-      ...response,
-      user: new ReturnedUserDto(response.user),
-    };
+  @ApiOperation({ summary: 'Activate user' })
+  @ApiException(() => BadRequestException, { description: 'Invalid activation link' })
+  @ApiParam({ name: 'id', type: String, description: 'Activation link ID' })
+  @ApiResponse({ status: 302, description: 'Redirect to the website' })
+  @Get('activate/:id')
+  async activate(@Param('id') id: ActivationLink['id'], @Res() res: Response) {
+    const redirectUrl = await this.authService.activate(id);
+
+    return res.redirect(redirectUrl);
   }
 
   @ApiOperation({ summary: 'Refresh access token' })

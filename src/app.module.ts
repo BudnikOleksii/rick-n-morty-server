@@ -11,6 +11,7 @@ import { RolesModule } from './roles/roles.module';
 import { TokensModule } from './tokens/tokens.module';
 import { CharactersModule } from './characters/characters.module';
 import { ActivationLinksModule } from './activation-links/activation-links.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ActivationLinksModule } from './activation-links/activation-links.modul
     TokensModule,
     CharactersModule,
     ActivationLinksModule,
+    MailModule,
   ],
   controllers: [],
   providers: [],

@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { Character } from '@prisma/client';
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { ApiException } from '@nanogiants/nestjs-swagger-api-exception-decorator';
 
 import { JwtAuthGuard } from '../common/guards';
@@ -45,6 +45,7 @@ export class CharactersController {
   }
 
   @ApiOperation({ summary: 'Get users with pagination' })
+  @ApiParam({ name: 'id', type: String, description: 'Activation link ID' })
   @ApiOkResponse({ status: 200, type: CharacterResponseDto })
   @Get(':id')
   async getCharacterById(@Param('id', ParseIntPipe) id: Character['id']) {
