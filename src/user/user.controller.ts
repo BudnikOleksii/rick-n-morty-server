@@ -15,7 +15,7 @@ import {
 } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { Request } from 'express';
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { ApiException } from '@nanogiants/nestjs-swagger-api-exception-decorator';
 
 import { JwtAuthGuard, RolesGuard } from '../common/guards';
@@ -51,6 +51,7 @@ export class UserController {
   }
 
   @ApiOperation({ summary: 'Get user by id' })
+  @ApiParam({ name: 'id', type: String, description: 'User id' })
   @ApiOkResponse({ status: 200, type: ReturnedUserDto })
   @ApiException(() => NotFoundException, { description: 'User not found' })
   @Get(':id')
@@ -61,6 +62,7 @@ export class UserController {
   }
 
   @ApiOperation({ summary: 'Update user roles, only for authorized ADMINS' })
+  @ApiParam({ name: 'id', type: String, description: 'User id' })
   @ApiOkResponse({ status: 200, type: ReturnedUserDto })
   @ApiException(() => NotFoundException, { description: 'User or role not found' })
   @Roles(MainRoles.admin)

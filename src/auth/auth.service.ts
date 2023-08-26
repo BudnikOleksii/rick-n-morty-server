@@ -1,22 +1,32 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { ConfigType } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
+import { ActivationLink, User } from '@prisma/client';
 
 import { UserService } from '../user/user.service';
 import { LoginDto, SignupDto } from './dto';
 import serverConfig from '../../config/server.config';
 import { ITokenWithId } from '../common/interfaces';
 import { TokensService } from '../tokens/tokens.service';
+import { ActivationLinksService } from '../activation-links/activation-links.service';
+import { MailService } from '../mail/mail.service';
+import { MessageResponse } from '../interfaces/message-response';
 
 @Injectable()
 export class AuthService {
   constructor(
     @Inject(serverConfig.KEY)
     private config: ConfigType<typeof serverConfig>,
-    private jwt: JwtService,
     private userService: UserService,
-    private tokensService: TokensService
+    private tokensService: TokensService,
+    private activationLinksService: ActivationLinksService,
+    private mailService: MailService
   ) {}
 
   async login(dto: LoginDto) {
@@ -33,14 +43,34 @@ export class AuthService {
 
   async signup(dto: SignupDto, ip: string) {
     const user = await this.userService.createUser({ ...dto, ip });
-    const tokens = await this.tokensService.generateTokens(user);
-    const tokenId = await this.tokensService.storeToken(tokens.refreshToken, user.id);
+    const activationLink = await this.activationLinksService.createActivationLink(user.id);
 
-    return {
-      ...tokens,
-      tokenId,
-      user,
-    };
+    return this.sendActivationLink(user, activationLink.id);
+  }
+
+  async activate(id: ActivationLink['id']) {
+    const activationLink = await this.activationLinksService.getActivationLink(id);
+    await this.userService.activateUser(activationLink.userId);
+
+    await this.activationLinksService.deleteActivationLink(id);
+
+    return this.config.clientUrl;
+  }
+
+  async resendActivationLink(email: User['email']) {
+    const user = await this.userService.getUserByEmail(email);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (user.activated) {
+      throw new BadRequestException('User has been already activated');
+    }
+
+    const activationLink = await this.activationLinksService.createActivationLink(user.id);
+
+    return this.sendActivationLink(user, activationLink.id);
   }
 
   async refreshTokens(tokenInfo: ITokenWithId) {
@@ -71,6 +101,29 @@ export class AuthService {
       throw new UnauthorizedException('Invalid password or email');
     }
 
+    if (!user.activated) {
+      throw new UnauthorizedException('Account is inactive, please, activate first');
+    }
+
     return user;
+  }
+
+  private async sendActivationLink(user: User, linkUUID: string) {
+    await this.mailService.sendMail({
+      to: user.email,
+      subject: `Activate your account for ${this.config.clientUrl}`,
+      templateName: 'activate-account',
+      context: {
+        username: user.username,
+        activationLink: `${this.config.apiUrl}/auth/activate/${linkUUID}`,
+      },
+    });
+
+    const response: MessageResponse = {
+      status: 'success',
+      message: `Activation link has been sent to ${user.email}`,
+    };
+
+    return response;
   }
 }

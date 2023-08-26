@@ -64,9 +64,17 @@ export class UserService {
       },
     };
 
-    // TODO create activation link record in database
-
     return this.userRepository.createUser(payload);
+  }
+
+  async activateUser(id: User['id']) {
+    const user = await this.userRepository.updateUser(id, { activated: true });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
   }
 
   async toggleUserRole(id: User['id'], roleValue: Role['value']) {

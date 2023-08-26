@@ -11,19 +11,26 @@ export interface ServerConfig {
   refreshSecret: string;
   accessExpiresIn: string;
   refreshExpiresIn: string;
+  apiUrl: string;
+  clientUrl: string;
 }
+
+const apiEntrypoint = '/api';
+const apiUrl = 'http://localhost:8080' + apiEntrypoint;
 
 export default registerAs(
   'server',
   (): ServerConfig => ({
     port: parseInt(process.env.SERVER_PORT, 10) || 8080,
-    apiEntrypoint: '/api',
+    apiEntrypoint,
     adminRole: 'ADMIN',
     userRole: 'USER',
     saltRounds: 7,
     accessSecret: process.env.JWT_ACCESS_SECRET,
     refreshSecret: process.env.JWT_REFRESH_SECRET,
     accessExpiresIn: '10m',
-    refreshExpiresIn: '30d',
+    refreshExpiresIn: '7d',
+    apiUrl,
+    clientUrl: 'http://localhost:3000',
   })
 );
