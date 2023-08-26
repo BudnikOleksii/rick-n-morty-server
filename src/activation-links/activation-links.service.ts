@@ -8,7 +8,8 @@ import { ActivationLinksRepository } from './activation-links.repository';
 export class ActivationLinksService {
   constructor(private activationLinksRepository: ActivationLinksRepository) {}
 
-  createActivationLink(userId: User['id']) {
+  async createActivationLink(userId: User['id']) {
+    await this.activationLinksRepository.deleteUserLink(userId);
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 1);
 

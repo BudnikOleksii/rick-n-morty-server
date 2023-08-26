@@ -1,4 +1,10 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { ConfigType } from '@nestjs/config';
 import { ActivationLink, User } from '@prisma/client';
@@ -51,6 +57,22 @@ export class AuthService {
     return this.config.clientUrl;
   }
 
+  async resendActivationLink(email: User['email']) {
+    const user = await this.userService.getUserByEmail(email);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (user.activated) {
+      throw new BadRequestException('User has been already activated');
+    }
+
+    const activationLink = await this.activationLinksService.createActivationLink(user.id);
+
+    return this.sendActivationLink(user, activationLink.id);
+  }
+
   async refreshTokens(tokenInfo: ITokenWithId) {
     const token = await this.tokensService.checkToken(tokenInfo);
 
@@ -77,6 +99,10 @@ export class AuthService {
 
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid password or email');
+    }
+
+    if (!user.activated) {
+      throw new UnauthorizedException('Account is inactive, please, activate first');
     }
 
     return user;

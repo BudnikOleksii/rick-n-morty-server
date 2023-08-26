@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ActivationLink, Prisma } from '@prisma/client';
+import { ActivationLink, Prisma, User } from '@prisma/client';
 
 import { PrismaService } from '../prisma/prisma.service';
 
@@ -15,6 +15,10 @@ export class ActivationLinksRepository {
 
   getActivationLink(id: ActivationLink['id']) {
     return this.prisma.activationLink.findUnique({ where: { id } });
+  }
+
+  deleteUserLink(userId: User['id']) {
+    return this.prisma.activationLink.deleteMany({ where: { userId } });
   }
 
   deleteActivationLink(id: ActivationLink['id']) {

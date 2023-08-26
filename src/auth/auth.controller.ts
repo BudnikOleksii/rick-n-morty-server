@@ -26,7 +26,7 @@ import {
 import { ApiException } from '@nanogiants/nestjs-swagger-api-exception-decorator';
 
 import { AuthService } from './auth.service';
-import { AuthResponseDto, LoginDto, SignupDto } from './dto';
+import { AuthResponseDto, LoginDto, SignupDto, UserEmailDto } from './dto';
 import { IRequestWithToken } from '../common/interfaces';
 import JwtRefreshGuard from '../common/guards/jwt-refresh.guard';
 import { ReturnedUserDto } from '../user/dto';
@@ -68,6 +68,14 @@ export class AuthController {
     const redirectUrl = await this.authService.activate(id);
 
     return res.redirect(redirectUrl);
+  }
+
+  @ApiOperation({ summary: 'Resend activation link' })
+  @ApiOkResponse({ status: 200, type: MessageResponse })
+  @ApiException(() => BadRequestException, { description: 'Username or email already in use' })
+  @Get('resend-activation-link')
+  async resendActivationLink(@Body() dto: UserEmailDto) {
+    return this.authService.resendActivationLink(dto.email);
   }
 
   @ApiOperation({ summary: 'Refresh access token' })
