@@ -17,6 +17,9 @@ export class CharacterResponseDto implements Character {
   name: string;
 
   @ApiProperty()
+  slug: string;
+
+  @ApiProperty()
   status: CharacterStatus;
 
   @ApiProperty()

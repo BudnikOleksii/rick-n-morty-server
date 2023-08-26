@@ -13,7 +13,7 @@ export const seedCharactersSpeciesTypes = async () => {
 
     await prisma.species.createMany({
       data: species,
-      skipDuplicates: true, // Skip duplicates if any (assuming id is a unique identifier)
+      skipDuplicates: true,
     });
 
     await prisma.type.createMany({
@@ -48,6 +48,7 @@ export const seedCharactersSpeciesTypes = async () => {
       originId: locationsMap.get(character.origin),
       locationId: locationsMap.get(character.location),
       image: character.image,
+      slug: character.name.replace(/ /g, '-').toLowerCase(),
     }));
 
     await prisma.character.createMany({

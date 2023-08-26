@@ -15,6 +15,13 @@ model Role {
   users       UserRole[]
 }
 
+model ActivationLink {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  expiresAt DateTime
+}
+
 model Chat {
   id       Int        @id @default(autoincrement())
   name     String
@@ -36,26 +43,26 @@ model Message {
 }
 
 model User {
-  id             Int           @id @default(autoincrement())
-  username       String        @unique
-  email          String        @unique
+  id             Int              @id @default(autoincrement())
+  username       String           @unique
+  email          String           @unique
   password       String
-  rating         Int           @default(0)
+  rating         Int              @default(0)
   ip             String
-  activationLink String
-  activated      Boolean       @default(false)
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  activated      Boolean          @default(false)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
   deletedAt      DateTime?
   roles          UserRole[]
   chats          Chat[]
   Message        Message[]
   UserChat       UserChat[]
-  Seller         Transaction[] @relation("seller")
-  Purchaser      Transaction[] @relation("purchaser")
+  Seller         Transaction[]    @relation("seller")
+  Purchaser      Transaction[]    @relation("purchaser")
   cards          Card[]
   lots           Lot[]
   Token          Token[]
+  ActivationLink ActivationLink[]
 }
 
 model Token {
@@ -95,12 +102,14 @@ model Type {
 model Species {
   id         Int         @id @default(autoincrement())
   name       String      @unique
+  slug       String      @unique
   characters Character[]
 }
 
 model Episode {
   id         Int                @id @default(autoincrement())
   name       String
+  slug       String             @unique
   airDate    DateTime?
   episode    String
   characters CharacterEpisode[]
@@ -109,6 +118,7 @@ model Episode {
 model Location {
   id         Int                 @id @default(autoincrement())
   name       String
+  slug       String              @unique
   type       String
   dimension  String
   characters LocationCharacter[]
@@ -119,6 +129,7 @@ model Location {
 model Character {
   id         Int                 @id @default(autoincrement())
   name       String
+  slug       String              @unique
   status     CharacterStatus
   species    Species             @relation(fields: [speciesId], references: [id])
   speciesId  Int

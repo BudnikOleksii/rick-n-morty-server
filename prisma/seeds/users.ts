@@ -17,7 +17,6 @@ export const seedUsers = async () => {
         password: await bcrypt.hash(LOCAL_ADMIN_PASSWORD, SALT_ROUNDS),
         ip: '0.0.0.0',
         activated: true,
-        activationLink: 'Already activated',
       },
       {
         username: 'Test user',
@@ -25,7 +24,6 @@ export const seedUsers = async () => {
         password: await bcrypt.hash(LOCAL_USER_PASSWORD, SALT_ROUNDS),
         ip: '0.0.0.0',
         activated: true,
-        activationLink: 'Already activated',
       },
     ];
 

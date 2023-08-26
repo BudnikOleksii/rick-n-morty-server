@@ -28,9 +28,6 @@ export class ReturnedUserDto implements User {
   updatedAt: Date;
 
   @Exclude()
-  activationLink: string;
-
-  @Exclude()
   activated: boolean;
 
   @Exclude()

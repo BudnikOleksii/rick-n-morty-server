@@ -19,6 +19,7 @@ export const getEpisodesData = async () => {
           name,
           airDate: new Date(air_date),
           episode,
+          slug: name.replace(/ /g, '-').toLowerCase(),
         });
       });
 

@@ -1,6 +1,5 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { v4 as uuidv4 } from 'uuid';
 import { Role, User } from '@prisma/client';
 import { ConfigType } from '@nestjs/config';
 
@@ -56,16 +55,16 @@ export class UserService {
     }
 
     const hashPassword = await bcrypt.hash(dto.password, this.config.saltRounds);
-    const activationLink = uuidv4();
     const role = await this.rolesService.getRoleByValue(this.config.userRole);
     const payload = {
       ...dto,
       password: hashPassword,
-      activationLink,
       roles: {
         create: [{ roleId: role.id }],
       },
     };
+
+    // TODO create activation link record in database
 
     return this.userRepository.createUser(payload);
   }

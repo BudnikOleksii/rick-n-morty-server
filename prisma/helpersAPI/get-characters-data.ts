@@ -43,8 +43,8 @@ export const getCharactersData = async () => {
     }
   }
 
-  speciesSet.forEach((speciesName) => {
-    species.push({ name: speciesName });
+  speciesSet.forEach((speciesName: string) => {
+    species.push({ name: speciesName, slug: speciesName.replace(/ /g, '-').toLowerCase() });
   });
 
   typesSet.forEach((typeName) => {

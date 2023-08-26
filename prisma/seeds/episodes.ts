@@ -11,7 +11,7 @@ export const seedEpisodes = async () => {
 
     await prisma.episode.createMany({
       data: episodes,
-      skipDuplicates: true, // Skip duplicates if any (assuming id is a unique identifier)
+      skipDuplicates: true,
     });
 
     console.log('Episodes seeding completed.');
