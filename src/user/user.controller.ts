@@ -1,3 +1,7 @@
+import type { User } from '@prisma/client';
+
+import { Request } from 'express';
+import { ApiException } from '@nanogiants/nestjs-swagger-api-exception-decorator';
 import {
   Body,
   ClassSerializerInterceptor,
@@ -13,18 +17,15 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { User } from '@prisma/client';
-import { Request } from 'express';
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { ApiException } from '@nanogiants/nestjs-swagger-api-exception-decorator';
 
-import { JwtAuthGuard, RolesGuard } from '../common/guards';
-import { PageDto } from '../common/dto';
-import { getEndpoint } from '../common/helpers';
-import { UserService } from './user.service';
-import { ReturnedUserDto, PaginatedUsersDto, ToggleRoleDto } from './dto';
 import { Roles } from '../common/decorators';
+import { PageDto } from '../common/dto';
+import { JwtAuthGuard, RolesGuard } from '../common/guards';
+import { getEndpoint } from '../common/helpers';
 import { MainRoles } from '../common/interfaces';
+import { PaginatedUsersDto, ReturnedUserDto, ToggleRoleDto } from './dto';
+import { UserService } from './user.service';
 
 @ApiTags('Users')
 @ApiBearerAuth()

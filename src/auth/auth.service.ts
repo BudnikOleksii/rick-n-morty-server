@@ -1,3 +1,9 @@
+import type { ITokenWithId } from '../common/interfaces';
+import type { MessageResponse } from '../common/interfaces/message-response';
+import type { LoginDto, SignupDto } from './dto';
+import type { ActivationLink, User } from '@prisma/client';
+
+import * as bcrypt from 'bcrypt';
 import {
   BadRequestException,
   Inject,
@@ -5,18 +11,13 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
 import { ConfigType } from '@nestjs/config';
-import { ActivationLink, User } from '@prisma/client';
 
-import { UserService } from '../user/user.service';
-import { LoginDto, SignupDto } from './dto';
 import serverConfig from '../../config/server.config';
-import { ITokenWithId } from '../common/interfaces';
-import { TokensService } from '../tokens/tokens.service';
 import { ActivationLinksService } from '../activation-links/activation-links.service';
 import { MailService } from '../mail/mail.service';
-import { MessageResponse } from '../interfaces/message-response';
+import { TokensService } from '../tokens/tokens.service';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {

@@ -1,4 +1,4 @@
-import { IInfoData } from '../interfaces';
+import type { IInfoData } from '../interfaces';
 
 export const createInfoData = (
   total: number,

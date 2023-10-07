@@ -1,6 +1,7 @@
+import type { IPaginatedResult } from '../../common/interfaces';
+
 import { ApiProperty } from '@nestjs/swagger';
 
-import { IPaginatedResult } from '../../common/interfaces';
 import { PaginationInfoDto } from '../../common/dto';
 import { CharacterResponseDto } from './character-response.dto';
 

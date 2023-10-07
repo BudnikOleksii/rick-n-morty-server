@@ -1,5 +1,6 @@
+import type { ActivationLink, User } from '@prisma/client';
+
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { ActivationLink, User } from '@prisma/client';
 import { Cron, CronExpression } from '@nestjs/schedule';
 
 import { ActivationLinksRepository } from './activation-links.repository';

@@ -1,3 +1,7 @@
+import type { ActivationLink } from '@prisma/client';
+
+import { Response } from 'express';
+import { ApiException } from '@nanogiants/nestjs-swagger-api-exception-decorator';
 import {
   BadRequestException,
   Body,
@@ -13,8 +17,6 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ActivationLink } from '@prisma/client';
-import { Response } from 'express';
 import {
   ApiBearerAuth,
   ApiOkResponse,
@@ -23,14 +25,13 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { ApiException } from '@nanogiants/nestjs-swagger-api-exception-decorator';
 
+import JwtRefreshGuard from '../common/guards/jwt-refresh.guard';
+import { IRequestWithToken } from '../common/interfaces';
+import { MessageResponse } from '../common/interfaces/message-response';
+import { ReturnedUserDto } from '../user/dto';
 import { AuthService } from './auth.service';
 import { AuthResponseDto, LoginDto, SignupDto, UserEmailDto } from './dto';
-import { IRequestWithToken } from '../common/interfaces';
-import JwtRefreshGuard from '../common/guards/jwt-refresh.guard';
-import { ReturnedUserDto } from '../user/dto';
-import { MessageResponse } from '../interfaces/message-response';
 
 @ApiTags('Auth')
 @UseInterceptors(ClassSerializerInterceptor)

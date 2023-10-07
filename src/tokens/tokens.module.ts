@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
 
-import { TokensService } from './tokens.service';
-import { TokensRepository } from './tokens.repository';
 import { getJWTConfig } from '../../config/jwt.config';
+import { TokensRepository } from './tokens.repository';
+import { TokensService } from './tokens.service';
 
 @Module({
   providers: [TokensService, TokensRepository],

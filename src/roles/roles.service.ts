@@ -1,5 +1,6 @@
+import type { Role } from '@prisma/client';
+
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Role } from '@prisma/client';
 
 import { RolesRepository } from './roles.repository';
 

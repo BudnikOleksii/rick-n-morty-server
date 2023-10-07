@@ -1,3 +1,7 @@
+import type { Character } from '@prisma/client';
+
+import { Request } from 'express';
+import { ApiException } from '@nanogiants/nestjs-swagger-api-exception-decorator';
 import {
   Controller,
   Get,
@@ -8,15 +12,12 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
-import { Request } from 'express';
-import { Character } from '@prisma/client';
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { ApiException } from '@nanogiants/nestjs-swagger-api-exception-decorator';
 
-import { JwtAuthGuard } from '../common/guards';
 import { PageDto } from '../common/dto';
-import { CharactersService } from './characters.service';
+import { JwtAuthGuard } from '../common/guards';
 import { getEndpoint } from '../common/helpers';
+import { CharactersService } from './characters.service';
 import { CharacterResponseDto, PaginatedCharactersDto } from './dto';
 import { UnusedCountDto } from './dto/unused-count.dto';
 

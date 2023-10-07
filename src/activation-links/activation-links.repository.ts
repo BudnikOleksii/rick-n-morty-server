@@ -1,5 +1,6 @@
+import type { ActivationLink, Prisma, User } from '@prisma/client';
+
 import { Injectable } from '@nestjs/common';
-import { ActivationLink, Prisma, User } from '@prisma/client';
 
 import { PrismaService } from '../prisma/prisma.service';
 
