@@ -1,5 +1,5 @@
 import type { PageDto } from '../common/dto';
-import type { IPaginatedResult } from '../common/interfaces';
+import type { IPaginatedResult } from '../common/types';
 import type { Character } from '@prisma/client';
 
 import { Injectable, NotFoundException } from '@nestjs/common';

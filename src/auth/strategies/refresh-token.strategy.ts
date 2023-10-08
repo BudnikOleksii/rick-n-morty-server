@@ -1,4 +1,4 @@
-import type { ITokenPayload } from '../../common/interfaces';
+import type { ITokenPayload } from '../../common/types';
 import type { Request } from 'express';
 
 import { ExtractJwt, Strategy } from 'passport-jwt';

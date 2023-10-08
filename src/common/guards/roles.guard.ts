@@ -1,4 +1,4 @@
-import type { IRequestWithToken } from '../interfaces';
+import type { IRequestWithToken } from '../types';
 import type { CanActivate, ExecutionContext } from '@nestjs/common';
 import type { Observable } from 'rxjs';
 

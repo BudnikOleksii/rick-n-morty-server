@@ -1,4 +1,4 @@
-import type { IInfoData } from '../interfaces';
+import type { IInfoData } from '../types';
 
 import { ApiProperty } from '@nestjs/swagger';
 

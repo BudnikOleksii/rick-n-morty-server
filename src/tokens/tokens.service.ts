@@ -1,4 +1,4 @@
-import type { ITokenPayload, ITokenWithId } from '../common/interfaces';
+import type { ITokenPayload, ITokenWithId } from '../common/types';
 import type { UserWithRoles } from '../user/user.repository';
 import type { Prisma, Token, User } from '@prisma/client';
 

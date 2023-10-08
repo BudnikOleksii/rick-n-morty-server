@@ -1,4 +1,4 @@
-import type { IPaginatedResult } from '../../common/interfaces';
+import type { IPaginatedResult } from '../../common/types';
 
 import { ApiProperty } from '@nestjs/swagger';
 

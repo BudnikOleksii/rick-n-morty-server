@@ -1,5 +1,5 @@
-import type { ITokenWithId } from '../common/interfaces';
-import type { MessageResponse } from '../common/interfaces/message-response';
+import type { ITokenWithId } from '../common/types';
+import type { MessageResponse } from '../common/types/message-response';
 import type { LoginDto, SignupDto } from './dto';
 import type { ActivationLink, User } from '@prisma/client';
 
