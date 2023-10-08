@@ -15,6 +15,6 @@ export class AuthResponseDto {
   })
   tokenId: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: () => ReturnedUserDto })
   user: ReturnedUserDto;
 }
