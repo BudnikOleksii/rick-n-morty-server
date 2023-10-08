@@ -27,8 +27,8 @@ import {
 } from '@nestjs/swagger';
 
 import JwtRefreshGuard from '../common/guards/jwt-refresh.guard';
-import { IRequestWithToken } from '../common/interfaces';
-import { MessageResponse } from '../common/interfaces/message-response';
+import { IRequestWithToken } from '../common/types';
+import { MessageResponse } from '../common/types/message-response';
 import { ReturnedUserDto } from '../user/dto';
 import { AuthService } from './auth.service';
 import { AuthResponseDto, LoginDto, SignupDto, UserEmailDto } from './dto';
