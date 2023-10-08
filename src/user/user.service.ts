@@ -1,16 +1,17 @@
-import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import type { PageDto } from '../common/dto';
+import type { IPaginatedResult } from '../common/interfaces';
+import type { CreateUserDto } from './dto';
+import type { Role, User } from '@prisma/client';
+
 import * as bcrypt from 'bcrypt';
-import { Role, User } from '@prisma/client';
+import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 
-import { CreateUserDto } from './dto';
+import serverConfig from '../../config/server.config';
+import { DEFAULT_LIMIT, DEFAULT_PAGE } from '../common/constatns';
+import { createInfoData } from '../common/helpers';
 import { RolesService } from '../roles/roles.service';
 import { UserRepository } from './user.repository';
-import serverConfig from '../../config/server.config';
-import { PageDto } from '../common/dto';
-import { createInfoData } from '../common/helpers';
-import { IPaginatedResult } from '../common/interfaces';
-import { DEFAULT_PAGE, DEFAULT_LIMIT } from '../common/constatns';
 
 @Injectable()
 export class UserService {

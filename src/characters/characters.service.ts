@@ -1,11 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { Character } from '@prisma/client';
+import type { PageDto } from '../common/dto';
+import type { IPaginatedResult } from '../common/interfaces';
+import type { Character } from '@prisma/client';
 
-import { CharactersRepository } from './characters.repository';
-import { PageDto } from '../common/dto';
-import { createInfoData } from '../common/helpers';
-import { IPaginatedResult } from '../common/interfaces';
+import { Injectable, NotFoundException } from '@nestjs/common';
+
 import { DEFAULT_LIMIT, DEFAULT_PAGE } from '../common/constatns';
+import { createInfoData } from '../common/helpers';
+import { CharactersRepository } from './characters.repository';
 
 @Injectable()
 export class CharactersService {

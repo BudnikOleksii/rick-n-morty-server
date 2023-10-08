@@ -1,13 +1,7 @@
-import {
-  Character,
-  CharacterGender,
-  CharacterStatus,
-  Episode,
-  Location,
-  Species,
-  Type,
-} from '@prisma/client';
+import type { Character, Episode } from '@prisma/client';
+
 import { ApiProperty } from '@nestjs/swagger';
+import { CharacterGender, CharacterStatus, Location, Species, Type } from '@prisma/client';
 
 export class CharacterResponseDto implements Character {
   @ApiProperty()

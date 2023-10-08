@@ -1,5 +1,6 @@
+import type { Character } from '@prisma/client';
+
 import { Injectable } from '@nestjs/common';
-import { Character } from '@prisma/client';
 
 import { PrismaService } from '../prisma/prisma.service';
 
@@ -35,7 +36,6 @@ export class CharactersRepository {
         type: true,
         origin: true,
         location: true,
-        // @ts-ignore
         episodes: { include: { episode: true } },
         sets: { include: { set: true } },
       },

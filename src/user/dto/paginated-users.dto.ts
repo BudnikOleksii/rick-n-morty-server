@@ -1,8 +1,9 @@
+import type { IPaginatedResult } from '../../common/interfaces';
+
 import { ApiProperty } from '@nestjs/swagger';
 
-import { IPaginatedResult } from '../../common/interfaces';
-import { ReturnedUserDto } from './returned-user.dto';
 import { PaginationInfoDto } from '../../common/dto';
+import { ReturnedUserDto } from './returned-user.dto';
 
 export class PaginatedUsersDto implements IPaginatedResult<ReturnedUserDto> {
   @ApiProperty()

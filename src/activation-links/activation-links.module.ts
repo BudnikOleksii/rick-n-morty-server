@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
-import { ActivationLinksService } from './activation-links.service';
+
 import { ActivationLinksRepository } from './activation-links.repository';
+import { ActivationLinksService } from './activation-links.service';
 
 @Module({
   providers: [ActivationLinksService, ActivationLinksRepository],

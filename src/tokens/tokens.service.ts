@@ -1,13 +1,14 @@
+import type { ITokenPayload, ITokenWithId } from '../common/interfaces';
+import type { UserWithRoles } from '../user/user.repository';
+import type { Prisma, Token, User } from '@prisma/client';
+
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { Prisma, Token, User } from '@prisma/client';
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Cron, CronExpression } from '@nestjs/schedule';
 
 import serverConfig from '../../config/server.config';
-import { ITokenPayload, ITokenWithId } from '../common/interfaces';
 import { TokensRepository } from './tokens.repository';
-import { UserWithRoles } from '../user/user.repository';
 
 @Injectable()
 export class TokensService {

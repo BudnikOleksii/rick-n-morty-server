@@ -1,6 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
+import type { IInfoData } from '../interfaces';
 
-import { IInfoData } from '../interfaces';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class PaginationInfoDto implements IInfoData {
   @ApiProperty({ example: 240, description: 'Entities in database count' })
